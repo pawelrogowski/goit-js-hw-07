@@ -21,4 +21,6 @@ const lightbox = new SimpleLightbox(".gallery .gallery__item", {
   captionsData: "alt",
   captionPosition: "bottom",
   captionPosition: 250,
+  // disable scroll added because it adds inline padding-right: 17px to body, happens only when viewport width is big
+  disableScroll: false,
 });
