@@ -1,6 +1,5 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
-
 const galleryElement = document.querySelector(".gallery");
 
 galleryItems.forEach((item) => {
@@ -16,11 +15,34 @@ galleryItems.forEach((item) => {
   linkElement.appendChild(imageElement);
   galleryElement.appendChild(linkElement);
 });
+function overflowsViewport() {
+  const elements = document.querySelectorAll("*");
+
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i];
+
+    const elementRect = element.getBoundingClientRect();
+
+    if (elementRect.right > viewportWidth || elementRect.left < 0 || elementRect.top < 0 || elementRect.bottom > viewportHeight) {
+      return true;
+    }
+  }
+  return false;
+}
 
 const lightbox = new SimpleLightbox(".gallery .gallery__item", {
   captionsData: "alt",
-  captionPosition: "bottom",
   captionPosition: 250,
-  // disable scroll added because it adds inline padding-right: 17px to body, happens only when viewport width is big
-  disableScroll: false,
+  disableScroll: overflowsViewport(),
 });
+
+window.addEventListener(
+  "resize",
+  _.debounce(function () {
+    const isOverflowing = overflowsViewport();
+    isOverflowing ? (lightbox.defaultOptions.disableScroll = true) : (lightbox.defaultOptions.disableScroll = false);
+  }, 100)
+);
